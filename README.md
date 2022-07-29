@@ -9,6 +9,7 @@
   - [Working with Django](#working-with-django)
   - [Working with DRF](#working-with-drf)
   - [Validators](#validators)
+- [Available model/serializer fields](#available-modelserializer-fields)
 - [License](#license)
 
 # Overview
@@ -43,7 +44,7 @@ class OrganizationModel(BankDetailsValidated):
 
 You have several options when you work with DRF.
 
-1. Inherit your model from ```BankDetailsUnValidated``` abstract model. This abstract model doesn't have any validation on it's own level.
+1. Inherit your model from ```BankDetailsUnValidated``` abstract model. This abstract model doesn't have any validation on it's own level:
 
 ```
 from django_bank_requisites.models import BankDetailsUnvalidated
@@ -66,7 +67,7 @@ class OrganizationSerializer(BankDetailsValidationMixin, serializers.ModelSerial
     field = "__all__"
 ```
 
-2. If you use ```BankDetailsValidated``` abstract model with all validation on model level and want validation from ```clean``` method works in serializer you also should inherit your model from ```SaveMethodMixin```.
+2. If you use ```BankDetailsValidated``` abstract model with all validation on model level and want validation from ```clean``` method works in serializer you also should inherit your model from ```SaveMethodMixin```:
 
 ```
 from django_bank_requisites.models import BankDetailsValidated
@@ -76,7 +77,7 @@ class OrganizationModel(SaveMethodMixin, BankDetailsValidated):
   pass
 ```
 
-If you leave everything as it is, you will get a ```HTTP 500 Internal Server Error```, because Django REST framework doesn't handle ```ValidationError``` from Django.\
+If you leave everything as it is, you will get a ```HTTP 500 Internal Server Error```, because Django REST framework doesn't handle ```ValidationError``` from Django.
 
 In order for DRF to correctly handle ```ValidationError``` from Django, you should add custom exception handler to ```REST_FRAMEWORK``` settings dict in your ```settings.py``` file.
 
@@ -90,9 +91,9 @@ REST_FRAMEWORK = {
 
 Now DRF will handle Django ```ValidationError``` correctly with a ```HTTP 400 Bad Request```.
 
-3. If you use ```BankDetailsValidated``` abstract model with all validation on model level and don't want to bother with ```SaveMethodMixin``` and exception hadndler, you can implement the same validation from model ```clean``` method in serializer ```validate``` method.\
+3. If you use ```BankDetailsValidated``` abstract model with all validation on model level and don't want to bother with ```SaveMethodMixin``` and exception handler, you can implement the same validation from model ```clean``` method in serializer ```validate``` method:
 
-Inherit your model from ```BankDetailsUnValidated``` abstract model:
+Inherit your model from ```BankDetailsValidated``` abstract model:
 
 ```
 from django_bank_requisites.models import BankDetailsValidated
@@ -113,6 +114,12 @@ class OrganizationSerializer(BankDetailsValidationMixin, serializers.ModelSerial
     field = "__all__"
 ```
 
+4. Also you can use non-model serializer with all validation steps:
+
+```
+from django_bank_requisites.serializers import BankDetailsSerializer
+```
+
 ## Validators
 
 This package provides a lot of built-in bank details validators for both Django and Python, so you can create your own models and serializers.
@@ -120,6 +127,17 @@ This package provides a lot of built-in bank details validators for both Django 
 Base validators from ```base_validators.py``` are not framework bound. They are implemented on Python-level and simply return ```True/False```.
 
 Django validators from ```django_validators.py``` are made up of base validators and raise Django ```ValidationError``` on validation fails.
+
+# Available model/serializer fields
+
+Currently the following fields are available in models and serializers:
+- Legal address
+- Bank name
+- INN
+- KPP
+- BIK
+- RS
+- KS
 
 # License
 
