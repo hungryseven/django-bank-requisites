@@ -4,6 +4,7 @@ INN_COEFFICIENTS = {
     "inn_12_last": (3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8)
 }
 BANK_ACCOUNT_COEFFICIENTS = (7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1)
+FIRST_3_KS_DIGITS = "301"
 
 ### HELPER FUNCS ###
 
@@ -63,17 +64,11 @@ def is_inn_check_num_valid(inn: str) -> bool:
     """
     last_digit = int(inn[-1])
     if len(inn) == 10:
-        result = _compare_inn_check_nums(inn, last_digit, 11, INN_COEFFICIENTS["inn_10"])
-        return (True
-                if result
-                else False)
+        return _compare_inn_check_nums(inn, last_digit, 11, INN_COEFFICIENTS["inn_10"])
     elif len(inn) == 12:
         penult_digit = int(inn[-2])
-        result = (_compare_inn_check_nums(inn, penult_digit, 11, INN_COEFFICIENTS["inn_12_penult"]) and
-                  _compare_inn_check_nums(inn, last_digit, 11, INN_COEFFICIENTS["inn_12_last"]))
-        return (True
-                if result
-                else False)
+        return (_compare_inn_check_nums(inn, penult_digit, 11, INN_COEFFICIENTS["inn_12_penult"]) and
+                _compare_inn_check_nums(inn, last_digit, 11, INN_COEFFICIENTS["inn_12_last"]))
 
 def is_ogrn_check_num_valid(ogrn: str) -> bool:
     """
@@ -81,15 +76,9 @@ def is_ogrn_check_num_valid(ogrn: str) -> bool:
     """
     last_digit = int(ogrn[-1])
     if len(ogrn) == 13:
-        result = _compare_ogrn_check_nums(ogrn[:12], last_digit, 11)
-        return (True
-                if result
-                else False)
+        return _compare_ogrn_check_nums(ogrn[:12], last_digit, 11)
     elif len(ogrn) == 15:
-        result = _compare_ogrn_check_nums(ogrn[:14], last_digit, 13)
-        return (True
-                if result
-                else False)
+        return _compare_ogrn_check_nums(ogrn[:14], last_digit, 13)
 
 def is_bank_account_code_check_num_valid(code: str, bik_digits: str) -> bool:
     """
@@ -121,7 +110,7 @@ def is_ks_3_first_digits_valid(ks: str) -> bool:
     Validates that the first 3 digits of KS match sequence '301'
     """
     return (True
-            if ks[:3]== "301"
+            if ks[:3] == FIRST_3_KS_DIGITS
             else False)
 
 ### BASE CODE VALIDATORS ###
@@ -130,43 +119,31 @@ def is_inn_valid(inn: str) -> bool:
     """
     Validates INN with all checks.
     """
-    result = (is_code_length_valid(code=inn, length=(10, 12)) and
-              is_code_structure_valid(code=inn) and
-              is_inn_check_num_valid(inn=inn))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=inn, length=(10, 12)) and
+            is_code_structure_valid(code=inn) and
+            is_inn_check_num_valid(inn=inn))
 
 def is_kpp_valid(kpp: str) -> bool:
     """
     Validates KPP with all checks.
     """
-    result = (is_code_length_valid(code=kpp, length=(9,)) and
-              is_code_structure_valid(code=kpp))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=kpp, length=(9,)) and
+            is_code_structure_valid(code=kpp))
 
 def is_ogrn_valid(ogrn: str) -> bool:
     """
     Validates OGRN with all checks.
     """
-    result = (is_code_length_valid(code=ogrn, length=(13, 15)) and
-              is_code_structure_valid(code=ogrn) and
-              is_ogrn_check_num_valid(ogrn=ogrn))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=ogrn, length=(13, 15)) and
+            is_code_structure_valid(code=ogrn) and
+            is_ogrn_check_num_valid(ogrn=ogrn))
 
 def is_bik_valid(bik: str) -> bool:
     """
     Validates BIK with all checks.
     """
-    result = (is_code_length_valid(code=bik, length=(9,)) and
-              is_code_structure_valid(code=bik))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=bik, length=(9,)) and
+            is_code_structure_valid(code=bik))
 
 def is_rs_valid(rs: str, bik: str) -> bool:
     """
@@ -175,12 +152,9 @@ def is_rs_valid(rs: str, bik: str) -> bool:
     if not is_bik_valid(bik=bik):
         return False
     bik_digits = bik[-3:]
-    result = (is_code_length_valid(code=rs, length=(20,)) and
-              is_code_structure_valid(code=rs) and
-              is_bank_account_code_check_num_valid(code=rs, bik_digits=bik_digits))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=rs, length=(20,)) and
+            is_code_structure_valid(code=rs) and
+            is_bank_account_code_check_num_valid(code=rs, bik_digits=bik_digits))
 
 def is_ks_valid(ks: str, bik: str) -> bool:
     """
@@ -193,9 +167,6 @@ def is_ks_valid(ks: str, bik: str) -> bool:
     if not is_ks_3_first_digits_valid(ks=ks):
         return False
     bik_digits = "0" + bik[4:6]
-    result = (is_code_length_valid(code=ks, length=(20,)) and
-              is_code_structure_valid(code=ks) and
-              is_bank_account_code_check_num_valid(code=ks, bik_digits=bik_digits))
-    return (True
-            if result
-            else False)
+    return (is_code_length_valid(code=ks, length=(20,)) and
+            is_code_structure_valid(code=ks) and
+            is_bank_account_code_check_num_valid(code=ks, bik_digits=bik_digits))
