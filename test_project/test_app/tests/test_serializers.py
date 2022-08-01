@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework.exceptions import ValidationError as DRFValidationError
 
-from test_app.models import OrganizationUnvalidated
-from test_app.serializers import UnvalidatedModelSerializer, ValidatedModelSerializer
+from test_project.test_app.models import OrganizationUnvalidated
+from test_project.test_app.serializers import UnvalidatedModelSerializer, ValidatedModelSerializer
 from django_bank_requisites.django_validators import error_messages
 
 class SetUpMixin:

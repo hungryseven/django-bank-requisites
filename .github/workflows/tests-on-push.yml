@@ -26,5 +26,4 @@ jobs:
         pytest tests
     - name: Run unittest
       run: |
-        cd test_project/
         python manage.py test

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # Your apps
-    'test_app',
+    'test_project.test_app',
 ]
 
 MIDDLEWARE = [

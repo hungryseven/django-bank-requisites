@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
-from test_app.models import OrganizationValidated
+from test_project.test_app.models import OrganizationValidated
 from django_bank_requisites.django_validators import error_messages
 
 class BankDetailsValidatedModelTestCase(TestCase):
